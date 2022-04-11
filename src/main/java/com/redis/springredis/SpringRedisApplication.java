@@ -13,8 +13,6 @@ import org.springframework.web.servlet.view.RedirectView;
 @RestController
 public class SpringRedisApplication {
 
-    //Here could be an Autowired
-    //but it is deprecated
     private final ProductDao dao;
 
     @Autowired
