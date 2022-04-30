@@ -1,22 +1,64 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:th="http://thymeleaf.org">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org">
+
+<!--<style>-->
+<!--    table, th, td {-->
+<!--        border:1px solid black;-->
+<!--    }-->
+<!--</style>-->
 
 <head>
     <meta charset="UTF-8">
     <title>All products</title>
+    <link rel="stylesheet" th:href="@{../css/main.css}" />
+    <link rel="stylesheet" href="../static/css/main.css"/>
 </head>
 
 <body>
+    <header th:fragment="header">
+        <div class="text">
+            <h1>Agnus</h1>
+        </div>
+        <nav class="navMenu">
+            <a href="#">Home</a>
+            <a href="/blog">Blog</a>
+            <a href="#">Work</a>
+            <a href="#">About</a>
+            <div class="dot"></div>
+        </nav>
+    </header>
 
-<div th:each="product: ${products}">
-    <a th:href="@{/all/{id}(id=${product.id})}">
-    <td th:text="${product.id}"/>
-    <td th:text="${product.name}"/>
-    <td th:text="${product.qty}"/>
-    <td th:text="${product.price}"/>
-</div>
+    <main>
+    <div class="description">
+        <p><b>Quality</b>, is anything more important?</p>
+        <p>We will prove that <b>no.</b></p>
+    </div>
+        <div class="table-section" cent>
+            <table id="table">
+                <tr class="header-row">
+                    <th>Link</th>
+                    <th>id</th>
+                    <th>Name</th>
+                    <th>Quantity</th>
+                    <th>Price for each</th>
+                </tr>
+                <tr th:each="product: ${products}" class="table-rows" >
+                    <td class="items"><a th:href="@{/all/{id}(id=${product.id})}">Description</a></td>
+                    <td class="items" th:text="${product.id}"/>
+                    <td class="items" th:text="${product.name}"/>
+                    <td class="items" th:text="${product.qty} + ' avaliable'"/>
+                    <td class="items" th:text="${product.price} + ' dollars'"/>
+                </tr>
+            </table>
+        </div>
+    <a href="/">Going back</a>
+    </main>
 
-<a href="/">Going back</a>
+
+    <footer th:fragment="footer">
+        <p>© Copyright 2022<br /> Autor: Cristian Suruceanu </p>
+    </footer>
 </body>
 
 </html>

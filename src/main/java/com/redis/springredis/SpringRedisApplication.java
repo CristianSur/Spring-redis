@@ -1,23 +1,27 @@
 package com.redis.springredis;
 
+import com.redis.springredis.entity.Comment;
 import com.redis.springredis.entity.Product;
+import com.redis.springredis.repository.CommentDao;
 import com.redis.springredis.repository.ProductDao;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.servlet.ModelAndView;
-import org.springframework.web.servlet.view.RedirectView;
 
 @SpringBootApplication
-@RestController
+@Controller
 public class SpringRedisApplication {
 
     private final ProductDao dao;
+    private final CommentDao commentDao;
 
     @Autowired
-    public SpringRedisApplication(ProductDao dao) {
+    public SpringRedisApplication(ProductDao dao, CommentDao commentDao) {
         this.dao = dao;
+        this.commentDao = commentDao;
     }
 
     public static void main(String[] args) {
@@ -25,41 +29,58 @@ public class SpringRedisApplication {
     }
 
     @RequestMapping(value = "/save", method = RequestMethod.POST)
-    public ModelAndView save(@ModelAttribute Product product) {
+    public String save(@ModelAttribute Product product, Model model) {
         System.out.println("Product from UI = " + product);
         dao.save(product);
-        ModelAndView modelAndView = new ModelAndView();
-        modelAndView.setViewName("product_info");
-        modelAndView.addObject("product", product);
-        return modelAndView;
+        model.addAttribute("product", product);
+        return "product_info";
     }
 
     @GetMapping("/all")
-    public ModelAndView getAllProducts() {
-        ModelAndView modelAndView = new ModelAndView();
-        modelAndView.setViewName("all_products");
-        modelAndView.addObject("products", dao.findAll());
-        return modelAndView;
+    public String getAllProducts(Model model) {
+        model.addAttribute("products", dao.findAll());
+        return "all_products";
     }
 
     @GetMapping("/all/{id}")
-    public ModelAndView findProduct(@PathVariable int id) {
-        ModelAndView modelAndView = new ModelAndView();
-        modelAndView.setViewName("product");
-        modelAndView.addObject("product", dao.findProductById(id));
-        return modelAndView;
+    public String findProduct(@PathVariable int id, Model model) {
+        model.addAttribute("product", dao.findProductById(id));
+        return "product";
     }
 
     @DeleteMapping("/delete/{id}")
-    public RedirectView remove(@PathVariable int id) {
-          dao.deleteProduct(id);
-          return new RedirectView("/all");
+    public String remove(@PathVariable int id) {
+        dao.deleteProduct(id);
+        return "redirect:/all";
     }
 
     @GetMapping()
-    public ModelAndView home() {
-        ModelAndView modelAndView = new ModelAndView();
-        modelAndView.setViewName("index");
-        return modelAndView;
+    public String home() {
+        return "index";
+    }
+
+    @PostMapping("/blog/save")
+    public String saveComment(@ModelAttribute Comment comment, Model model) {
+        commentDao.save(comment);
+        model.addAttribute("comment", comment);
+        return "redirect:/blog";
+    }
+
+    @GetMapping("/blog")
+    public String blog(Model model) {
+        model.addAttribute("comments", commentDao.findAll());
+        return "blog";
+    }
+
+    @DeleteMapping("/delete/comment/{id}")
+    public String removeComment(@PathVariable int id) {
+        commentDao.deleteComment(id);
+        return "redirect:/blog";
+    }
+
+    @GetMapping("/comment/{id}")
+    public String findComment(@PathVariable int id, Model model) {
+        model.addAttribute("comment", commentDao.findCommentById(id));
+        return "comment_info";
     }
 }

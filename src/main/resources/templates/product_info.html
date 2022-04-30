@@ -4,9 +4,13 @@
 <head>
     <meta charset="UTF-8">
     <title>Description</title>
+    <link rel="stylesheet" th:href="@{../css/main.css}" />
+
 </head>
 
 <body>
+<header th:replace="all_products :: header"></header>
+
 <p>You added this product: </p>
 <table>
     <tr>
@@ -19,6 +23,9 @@
     </tr>
 </table>
 <a href="/">Going back</a>
+
+<footer th:replace="all_products :: footer"></footer>
+
 </body>
 
 </html>
