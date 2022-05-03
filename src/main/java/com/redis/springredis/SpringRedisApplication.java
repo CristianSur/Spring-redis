@@ -12,75 +12,9 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
 @SpringBootApplication
-@Controller
 public class SpringRedisApplication {
-
-    private final ProductDao dao;
-    private final CommentDao commentDao;
-
-    @Autowired
-    public SpringRedisApplication(ProductDao dao, CommentDao commentDao) {
-        this.dao = dao;
-        this.commentDao = commentDao;
-    }
 
     public static void main(String[] args) {
         SpringApplication.run(SpringRedisApplication.class, args);
-    }
-
-    @RequestMapping(value = "/save", method = RequestMethod.POST)
-    public String save(@ModelAttribute Product product, Model model) {
-        System.out.println("Product from UI = " + product);
-        dao.save(product);
-        model.addAttribute("product", product);
-        return "product_info";
-    }
-
-    @GetMapping("/all")
-    public String getAllProducts(Model model) {
-        model.addAttribute("products", dao.findAll());
-        return "all_products";
-    }
-
-    @GetMapping("/all/{id}")
-    public String findProduct(@PathVariable int id, Model model) {
-        model.addAttribute("product", dao.findProductById(id));
-        return "product";
-    }
-
-    @DeleteMapping("/delete/{id}")
-    public String remove(@PathVariable int id) {
-        dao.deleteProduct(id);
-        return "redirect:/all";
-    }
-
-    @GetMapping()
-    public String home() {
-        return "index";
-    }
-
-    @PostMapping("/blog/save")
-    public String saveComment(@ModelAttribute Comment comment, Model model) {
-        commentDao.save(comment);
-        model.addAttribute("comment", comment);
-        return "redirect:/blog";
-    }
-
-    @GetMapping("/blog")
-    public String blog(Model model) {
-        model.addAttribute("comments", commentDao.findAll());
-        return "blog";
-    }
-
-    @DeleteMapping("/delete/comment/{id}")
-    public String removeComment(@PathVariable int id) {
-        commentDao.deleteComment(id);
-        return "redirect:/blog";
-    }
-
-    @GetMapping("/comment/{id}")
-    public String findComment(@PathVariable int id, Model model) {
-        model.addAttribute("comment", commentDao.findCommentById(id));
-        return "comment_info";
     }
 }
