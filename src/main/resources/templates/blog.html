@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Blog</title>
+    <link rel="stylesheet" th:href="@{../css/main.css}" />
+    <link rel="stylesheet" href="../static/css/main.css"/>
+</head>
+
+<body>
+
+<header th:replace="all_products :: header"></header>
+
+<main>
+    <table id="table">
+        <tr class="header-row">
+            <th>delete</th>
+            <th>id</th>
+            <th>text</th>
+        </tr>
+        <tr th:each="comment: ${comments}" class="table-rows" >
+            <td class="items"><a th:href="@{/comment/{id}(id=${comment.id})}">Description</a></td>
+            <td class="items" th:text="${comment.id}"/>
+            <td class="items" th:text="${comment.text}"/>
+    <!--        <td class="items" th:text="${comment.qty} + ' avaliable'"/>-->
+    <!--        <td class="items" th:text="${comment.price} + ' dollars'"/>-->
+        </tr>
+    </table>
+
+    <div class="comment" th:each="comment: ${comments}" >
+        <div class="comment-avatar"></div>
+        <div class="comment-author" th:text="${'User id:' + comment.id}"></div>
+        <div class="comment-text" th:text="${comment.text}">Mi-au placut produsele. Maioul pe care -am procurat a fost de calitate buna.
+            <div class="comment-date">15.09.2022</div>
+        </div>
+        <a href="#reply" title="Raspuns" class="comment-reply"></a>
+    </div>
+
+    <form action="blog/save" method="post">
+        <table style="width:40%">
+            <tr>
+                <td><label>ID of the product</label> </td>
+                <td><input type="text" name="id"></td>
+            </tr>
+            <tr>
+                <td><label>Name of the product</label> </td>
+                <td><input type="text" name="text"></td>
+            </tr>
+            <tr>
+                <td></td>
+                <td><input type="submit" value="Submit"></td>
+            </tr>
+        </table>
+    </form>
+</main>
+
+<footer th:replace="all_products :: footer"></footer>
+
+</body>
+</html>
