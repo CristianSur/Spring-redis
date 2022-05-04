@@ -1,4 +1,4 @@
-# Suruceanu_Cristian_Task_1_Junior
+# spring-redis
 Small redis project
 
 Я создал супер-микросервис в котором можно управлять хранилищем посредством добавления и удаления обьектов в Redis.
